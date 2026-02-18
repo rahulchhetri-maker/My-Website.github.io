@@ -12,29 +12,32 @@ const status = document.getElementById('form-status');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  e.stopPropagation(); 
+
   const data = new FormData(form);
   const btn = document.getElementById('submit-btn');
+  
   btn.innerText = "Sending...";
   btn.disabled = true;
 
   try {
     const response = await fetch(form.action, {
-      method: form.method,
+      method: 'POST',
       body: data,
       headers: { 'Accept': 'application/json' }
     });
 
     if (response.ok) {
-      status.innerHTML = "Thanks! Your message has been sent.";
-      status.style.color = "green";
+      status.innerHTML = "Success! Message sent.";
+      status.style.color = "#28a745";
       form.reset();
     } else {
-      status.innerHTML = "Oops! There was a problem.";
-      status.style.color = "red";
+      status.innerHTML = "Error: Please check your Formspree ID.";
+      status.style.color = "#dc3545";
     }
   } catch (error) {
-    status.innerHTML = "Oops! Connection error.";
-    status.style.color = "red";
+    status.innerHTML = "Connection error. Try again.";
+    status.style.color = "#dc3545";
   } finally {
     btn.innerText = "Send Message";
     btn.disabled = false;
